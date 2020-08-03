@@ -113,7 +113,7 @@ Dao层、Service层、Controller层
 
   ```java
   //sqlSessionFactory --> sqlSession
-  public class MybatisUtils {
+  public class utils.MybatisUtils {
   
       static SqlSessionFactory sqlSessionFactory = null;
   
@@ -182,7 +182,7 @@ Dao层、Service层、Controller层
         @Test
         public void test_getUserList() {
             //1.获取SqlSession对象
-            SqlSession sqlSession = MybatisUtils.getSqlSession();
+            SqlSession sqlSession = utils.MybatisUtils.getSqlSession();
             //2.执行SQL
             // 方式一：getMapper
             UserDao userDao = sqlSession.getMapper(UserDao.class);
@@ -272,7 +272,7 @@ namespace中的包名要和Dao/Mapper接口的包名一致
         ```java
             @Test
             public void test_addUser() {
-                SqlSession sqlSession = MybatisUtils.getSqlSession();
+                SqlSession sqlSession = utils.MybatisUtils.getSqlSession();
                 UserDao mapper = sqlSession.getMapper(UserDao.class);
                 User user = new User(5, "黑子", "666");
                 mapper.addUser(user);
@@ -283,7 +283,7 @@ namespace中的包名要和Dao/Mapper接口的包名一致
          }
      ```
      
-  4. ==注意==：增删改查一定要提交事务：
+  4. 注意：增删改查一定要提交事务：
   
       ```java
         sqlSession.commit();
@@ -319,7 +319,7 @@ namespace中的包名要和Dao/Mapper接口的包名一致
    ```java
        @Test
        public void test_updateUser() {
-           SqlSession sqlSession = MybatisUtils.getSqlSession();
+           SqlSession sqlSession = utils.MybatisUtils.getSqlSession();
            UserDao mapper = sqlSession.getMapper(UserDao.class);
            User user = new User(5, "黑子", "777");
            mapper.updateUser(user);
@@ -360,7 +360,7 @@ namespace中的包名要和Dao/Mapper接口的包名一致
    ```java
        @Test
        public void test_deleteUser() {
-           SqlSession sqlSession = MybatisUtils.getSqlSession();
+           SqlSession sqlSession = utils.MybatisUtils.getSqlSession();
            UserDao mapper = sqlSession.getMapper(UserDao.class);
            mapper.deleteUser(5);
            //增删改一定要提交事务
@@ -395,7 +395,7 @@ public void addUser2(Map<String,Object> map);
 ```java
     @Test
     public void test_addUser2(){
-        SqlSession sqlSession = MybatisUtils.getSqlSession();
+        SqlSession sqlSession = utils.MybatisUtils.getSqlSession();
         UserDao mapper = sqlSession.getMapper(UserDao.class);
         HashMap<String, Object> map = new HashMap<>();
         map.put("userid",5);
@@ -442,9 +442,11 @@ public void addUser2(Map<String,Object> map);
 
 ## 4、配置解析
 
-### 1. 核心配置文件
+> [具体参照官方文档](https://mybatis.org/mybatis-3/zh/configuration.html)
 
-- mybatis-config.xml
+### 4.1. 核心配置文件
+
+- `mybatis-config.xml`
 
 - Mybatis的配置文件包含了会深深影响MyBatis行为的设置和属性信息。
 
@@ -464,7 +466,7 @@ public void addUser2(Map<String,Object> map);
       mappers（映射器）
   ```
 
-### 2. 环境配置 environments
+### 4.2. 环境配置 environments
 
 MyBatis 可以配置成适应多种环境
 
@@ -472,9 +474,14 @@ MyBatis 可以配置成适应多种环境
 
 学会使用配置多套运行环境！
 
-MyBatis默认的事务管理器就是JDBC ，连接池：POOLED
+MyBatis默认的事务管理器就是`JDBC` ，连接池：`POOLED`
 
-### 3. 属性 properties
+```xml
+<transactionManager type="JDBC"/>
+<dataSource type="POOLED">
+```
+
+### 4.3. 属性 properties
 
 我们可以通过properties属性来实现引用配置文件
 
@@ -482,30 +489,41 @@ MyBatis默认的事务管理器就是JDBC ，连接池：POOLED
 
 1. 编写一个配置文件
 
-   db.properties
+   `config.properties`
 
    ```properties
    driver=com.mysql.cj.jdbc.Driver
-   url=jdbc:mysql://localhost:3306/mybatis?userSSL=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
-   username=root
-   password=root
+   url=jdbc:mysql://192.168.1.110:3306/mybatis?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
    ```
-
+   
 2. 在核心配置文件中引入
 
    ```xml
    <!--引用外部配置文件-->
-   <properties resource="db.properties">
+   <properties resource="config.properties">
+       <!--可以在其中增加一些属性配置-->
        <property name="username" value="root"/>
-       <property name="password" value="root"/>
-   </properties>
+       <property name="password" value="7debug7"/>
+       <!--如果两个文件有同一个字段，优先使用外部配置文件-->
+</properties>
+   <environments default="home">
+           <environment id="home">
+               <transactionManager type="JDBC"/>
+               <dataSource type="POOLED">
+                   <property name="driver" value="${driver}"/>
+                   <property name="url" value="${url}"/>
+                   <property name="username" value="${username}"/>
+                   <property name="password" value="${password}"/>
+               </dataSource>
+           </environment>
+   </environments>
    ```
-
+   
    - 可以直接引入外部文件
    - 可以在其中增加一些属性配置
-   - 如果两个文件有同一个字段，优先使用外部配置文件的
+   - 如果两个文件有同一个字段，`优先使用外部配置文件`
 
-### 4. 类型别名 typeAliases
+### 4.4. 类型别名 typeAliases
 
 - 类型别名可为 Java 类型设置一个缩写名字。 它仅用于 XML 配置.
 
@@ -539,13 +557,13 @@ MyBatis默认的事务管理器就是JDBC ，连接池：POOLED
   }
   ```
 
-### 5. 设置 Settings
+### 4.5. 设置 Settings
 
 这是 MyBatis 中极为重要的调整设置，它们会改变 MyBatis 的运行时行为。
 
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/2020062316474822.png)
 
-### 6. 其他配置
+### 4.6. 其他配置
 
 - [typeHandlers（类型处理器）](https://mybatis.org/mybatis-3/zh/configuration.html#typeHandlers)
 - [objectFactory（对象工厂）](https://mybatis.org/mybatis-3/zh/configuration.html#objectFactory)
@@ -554,7 +572,7 @@ MyBatis默认的事务管理器就是JDBC ，连接池：POOLED
   - mybatis-plus
   - 通用mapper
 
-### 7. 映射器 mappers
+### 4.7. 映射器 mappers
 
 MapperRegistry：注册绑定我们的Mapper文件；
 
@@ -589,7 +607,7 @@ MapperRegistry：注册绑定我们的Mapper文件；
 </mappers>
 ```
 
-### 8. 作用域和生命周期
+### 4.8. 作用域和生命周期
 
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200623164809990.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0RERERlbmdf,size_16,color_FFFFFF,t_70)
 
@@ -812,7 +830,7 @@ SELECT * from user limit startIndex,pageSize
    ```java
        @Test
        public void getUserByLimit(){
-           SqlSession sqlSession = MybatisUtils.getSqlSession();
+           SqlSession sqlSession = utils.MybatisUtils.getSqlSession();
            UserMapper mapper = sqlSession.getMapper(UserMapper.class);
            HashMap<String, Integer> map = new HashMap<String, Integer>();
            map.put("startIndex",1);
@@ -848,7 +866,7 @@ SELECT * from user limit startIndex,pageSize
 
    ```java
        public void getUserByRowBounds(){
-           SqlSession sqlSession = MybatisUtils.getSqlSession();
+           SqlSession sqlSession = utils.MybatisUtils.getSqlSession();
            //RowBounds实现
            RowBounds rowBounds = new RowBounds(1, 2);
            //通过Java代码层面实现分页
@@ -1262,7 +1280,7 @@ CREATE TABLE `mybatis`.`blog`  (
    ```java
        @Test
        public void test1() {
-           SqlSession sqlSession = MybatisUtils.getSqlSession();
+           SqlSession sqlSession = utils.MybatisUtils.getSqlSession();
            UserMapper mapper = sqlSession.getMapper(UserMapper.class);
            User user = mapper.getUserById(1);
            System.out.println(user);
