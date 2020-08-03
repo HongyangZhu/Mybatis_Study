@@ -668,21 +668,24 @@ MapperRegistry：注册绑定我们的Mapper文件；
 
 结果集映射
 
-> id name pwd
+> 数据库中字段名：id name pwd
 >
-> id name password
+> Java实体类中的属性名：id name password
 
 ```xml
 <!--结果集映射-->
 <resultMap id="UserMap" type="User">
     <!--column数据库中的字段，property实体类中的属性-->
-    <result column="id" property="id"></result>
-    <result column="name" property="name"></result>
-    <result column="pwd" property="password"></result>
+    <result column="ID" property="id"/>
+    <result column="NAME" property="name"/>
+    <result column="PWD" property="password"/>
 </resultMap>
 
-<select id="getUserList" resultMap="UserMap">
-    select * from USER
+<!--根据ID查询用户-->
+<select id="getUserByID" resultMap="UserMap">
+    SELECT *
+    FROM USER
+    where ID = #{id}
 </select>
 ```
 

@@ -7,9 +7,9 @@
     <!--结果集映射-->
     <resultMap id="UserMap" type="User">
         <!--column数据库中的字段，property实体类中的属性-->
-        <result column="ID" property="id"></result>
-        <result column="NAME" property="name"></result>
-        <result column="PWD" property="password"></result>
+        <result column="ID" property="id"/>
+        <result column="NAME" property="name"/>
+        <result column="PWD" property="password"/>
     </resultMap>
 
     <!--查询所有用户-->
@@ -19,7 +19,7 @@
     </select>
 
     <!--根据ID查询用户-->
-    <select id="getUserByID" parameterType="int" resultType="pojo.User" resultMap="UserMap">
+    <select id="getUserByID" resultMap="UserMap">
         SELECT *
         FROM USER
         where ID = #{id}
