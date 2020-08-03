@@ -10,6 +10,11 @@
         <property name="password" value="7debug7"/>
         <!--如果两个文件有同一个字段，优先使用外部配置文件-->
     </properties>
+    <!--可以给实体类起别名-->
+    <typeAliases>
+        <typeAlias type="pojo.User" alias="User"/>
+        <package name="pojo"/>
+    </typeAliases>
     <!--环境配置（environments）-->
     <environments default="home">
         <environment id="company">

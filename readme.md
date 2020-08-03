@@ -532,7 +532,7 @@ MyBatis默认的事务管理器就是`JDBC` ，连接池：`POOLED`
   ```xml
   <!--可以给实体类起别名-->
   <typeAliases>
-      <typeAlias type="com.kuang.pojo.User" alias="User"/>
+      <typeAlias type="pojo.User" alias="User"/>
   </typeAliases>
   ```
 
@@ -540,7 +540,7 @@ MyBatis默认的事务管理器就是`JDBC` ，连接池：`POOLED`
 
   ```xml
   <typeAliases>
-      <package name="com.kuang.pojo"/>
+      <package name="pojo"/>
   </typeAliases>
   ```
 

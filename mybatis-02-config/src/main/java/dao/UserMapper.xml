@@ -6,7 +6,7 @@
 <mapper namespace="dao.UserDao">
 
     <!--查询所有用户-->
-    <select id="getUserList" resultType="pojo.User">
+    <select id="getUserList" resultType="user">
         SELECT *
         FROM USER
     </select>
