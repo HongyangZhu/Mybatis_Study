@@ -635,7 +635,7 @@ MapperRegistry：注册绑定我们的Mapper文件；
 
 ## 5、解决属性名和字段名不一致的问题
 
-### 1. 问题
+### 5.1. 问题
 
 数据库中的字段
 
@@ -664,7 +664,7 @@ MapperRegistry：注册绑定我们的Mapper文件；
 </select>
 ```
 
-### 2. resultMap
+### 5.2. resultMap
 
 结果集映射
 

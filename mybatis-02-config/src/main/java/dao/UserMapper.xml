@@ -4,6 +4,13 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!--namespace绑定一个对应的mapper接口-->
 <mapper namespace="dao.UserMapper">
+    <!--结果集映射-->
+    <resultMap id="UserMap" type="User">
+        <!--column数据库中的字段，property实体类中的属性-->
+        <result column="ID" property="id"></result>
+        <result column="NAME" property="name"></result>
+        <result column="PWD" property="password"></result>
+    </resultMap>
 
     <!--查询所有用户-->
     <select id="getUserList" resultType="user">
@@ -12,7 +19,7 @@
     </select>
 
     <!--根据ID查询用户-->
-    <select id="getUserByID" parameterType="int" resultType="pojo.User">
+    <select id="getUserByID" parameterType="int" resultType="pojo.User" resultMap="UserMap">
         SELECT *
         FROM USER
         where ID = #{id}
