@@ -424,7 +424,14 @@ public void addUser2(Map<String,Object> map);
 1. Java代码执行的时候，传递通配符% %
 
    ```java
-   List<User> userList = mapper.getUserLike("%李%");
+   List<User> userList = mapper.getUserLike("%T%");
+   ```
+
+   ```xml
+       <!--模糊查询-->
+       <select id="getUserLike" resultType="pojo.User">
+           SELECT * FROM USER WHERE NAME LIKE #{value}
+       </select>
    ```
 
 2. 在sql拼接中使用通配符

@@ -22,5 +22,8 @@ public interface UserDao {
     int deleteUser(int id);
 
     //用万能Map插入用户
-     void addUser2(Map<String,Object> map);
+    void addUser2(Map<String, Object> map);
+
+    //模糊查询
+    List<User> getUserLike(String value);
 }

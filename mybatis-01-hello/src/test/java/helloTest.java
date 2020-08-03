@@ -83,4 +83,18 @@ public class helloTest {
         //关闭资源
         sqlSession.close();
     }
+
+    @Test
+    public void test_getUserLike(){
+        SqlSession sqlSession = MybatisUtils.getSqlSession();
+        UserDao mapper = sqlSession.getMapper(UserDao.class);
+
+        List<User> userList = mapper.getUserLike("%T%");
+        for (User user : userList) {
+            System.out.println(user);
+        }
+
+        //关闭资源
+        sqlSession.close();
+    }
 }

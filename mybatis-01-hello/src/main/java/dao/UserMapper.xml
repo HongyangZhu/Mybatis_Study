@@ -43,4 +43,9 @@
     <insert id="addUser2" parameterType="map">
         insert into USER (ID,NAME,PWD) values (#{userid},#{username},#{userpassword})
     </insert>
+
+    <!--模糊查询-->
+    <select id="getUserLike" resultType="pojo.User">
+        SELECT * FROM USER WHERE NAME LIKE #{value}
+    </select>
 </mapper>
