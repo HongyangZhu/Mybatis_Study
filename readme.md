@@ -80,9 +80,8 @@ Dao层、Service层、Controller层
            <scope>test</scope>
        </dependency>
    </dependencies>
-   12345678910111213141516171819202122
    ```
-
+   
 4. 创建一个Module
 
 ### 2.2 创建一个模块
@@ -108,9 +107,8 @@ Dao层、Service层、Controller层
           </environment>
       </environments>
   </configuration>
-  123456789101112131415161718
   ```
-
+  
 - 编写mybatis工具类
 
   ```java
@@ -136,7 +134,6 @@ Dao层、Service层、Controller层
           return sqlSessionFactory.openSession();
       }
   }
-  12345678910111213141516171819202122
   ```
 
 ### 2.3 编写代码
@@ -149,9 +146,8 @@ Dao层、Service层、Controller层
   public interface UserDao {
       public List<User> getUserList();
   }
-  123
   ```
-
+  
 - 接口实现类 （由原来的UserDaoImpl转变为一个Mapper配置文件）
 
   ```xml
@@ -159,14 +155,15 @@ Dao层、Service层、Controller层
   <!DOCTYPE mapper
           PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
           "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <!--namespace绑定一个对应的mapper接口-->
+  <mapper namespace="dao.UserDao">
   
-  <!--namespace=绑定一个指定的Dao/Mapper接口-->
-  <mapper namespace="com.kuang.dao.UserDao">
-      <select id="getUserList" resultType="com.kuang.pojo.User">
-      select * from USER
-    </select>
+      <!--id方法名-->
+      <select id="getUserList" resultType="pojo.User">
+          SELECT * FROM USER
+      </select>
+  
   </mapper>
-  1234567891011
   ```
 
 - 测试
@@ -183,8 +180,7 @@ Dao层、Service层、Controller层
 
     ```java
         @Test
-        public void test(){
-    
+        public void test_getUserList() {
             //1.获取SqlSession对象
             SqlSession sqlSession = MybatisUtils.getSqlSession();
             //2.执行SQL
@@ -194,11 +190,9 @@ Dao层、Service层、Controller层
             for (User user : userList) {
                 System.out.println(user);
             }
-    
             //关闭sqlSession
             sqlSession.close();
         }
-    12345678910111213141516
     ```
 
 **可能会遇到的问题：**
@@ -211,13 +205,38 @@ Dao层、Service层、Controller层
 
 ## 3、CURD
 
-### 1. namespace
+### 3.1. namespace
 
 namespace中的包名要和Dao/Mapper接口的包名一致
 
-### 2. select
+### 3.2. select
 
 选择，查询语句；
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace绑定一个对应的mapper接口-->
+<mapper namespace="dao.UserDao">
+
+    <!--查询所有用户-->
+    <select id="getUserList" resultType="pojo.User">
+        SELECT *
+        FROM USER
+    </select>
+
+    <!--根据ID查询用户-->
+    <select id="getUserByID" parameterType="int" resultType="pojo.User">
+        SELECT *
+        FROM USER
+        where ID = #{id}
+    </select>
+
+
+</mapper>
+```
 
 - id：就是对应的namespace中的方法名；
 
@@ -225,55 +244,133 @@ namespace中的包名要和Dao/Mapper接口的包名一致
 
 - parameterType : 参数类型；
 
-  1. 编写接口
+### 3.3. Insert
 
-     ```java
-     public interface UserMapper {
-         //查询所有用户
-         public List<User> getUserList();
-         //插入用户
-         public void addUser(User user);
-     }
-     ```
-
+- 1. 编写接口
+    
+    ```java
+         public interface UserMapper {
+         ...
+             //插入用户
+             public void addUser(User user);
+         ...
+         }
+    ```
+    
   2. 编写对应的mapper中的sql语句
-
-     ```xml
-     <insert id="addUser" parameterType="com.kuang.pojo.User">
-         insert into user (id,name,password) values (#{id}, #{name}, #{password})
-     </insert>
-     ```
-
+        
+        ```xml
+             <!--插入用户-->
+             <insert id="addUser" parameterType="pojo.User">
+                 insert into USER (id, name, PWD)
+                 values (#{id}, #{name}, #{password})
+             </insert>
+        ```
+        
   3. 测试
-
-     ```java
-     @Test
-     public void test2() {
-         SqlSession sqlSession = MybatisUtils.getSqlSession();
-         UserMapper mapper = sqlSession.getMapper(UserMapper.class);
-         User user  = new User(3,"黑子","666");
-         mapper.addUser(user);
-         //增删改一定要提交事务
-         sqlSession.commit();
+        
+        ```java
+            @Test
+            public void test_addUser() {
+                SqlSession sqlSession = MybatisUtils.getSqlSession();
+                UserDao mapper = sqlSession.getMapper(UserDao.class);
+                User user = new User(5, "黑子", "666");
+                mapper.addUser(user);
+                //增删改一定要提交事务
+                sqlSession.commit();
+                //关闭sqlSession
+             sqlSession.close();
+         }
+     ```
      
-         //关闭sqlSession
-         sqlSession.close();
-     }
-     ```
+  4. ==注意==：增删改查一定要提交事务：
+  
+      ```java
+        sqlSession.commit();
+      ```
 
-     **注意：增删改查一定要提交事务：**
+### 3.4. update
 
-     ```java
-     sqlSession.commit();
-     ```
+1. 编写接口
 
-### 3. Insert
+   ```java
+        public interface UserMapper {
+        ...
+           //更新用户
+           public void updateUser(User user);
+        ...
+        }
+   ```
 
-### 4. update
+2. 编写对应的mapper中的sql语句
 
-### 5. Delete
+   ```xml
+       <!--更新用户-->
+       <update id="updateUser" parameterType="pojo.User">
+           update USER
+           set NAME=#{name},
+               PWD=#{pwd}
+           where ID = #{id};
+       </update>
+   ```
 
-### 6. 万能Map
+3. 测试
+
+   ```java
+       @Test
+       public void test_updateUser() {
+           SqlSession sqlSession = MybatisUtils.getSqlSession();
+           UserDao mapper = sqlSession.getMapper(UserDao.class);
+           User user = new User(5, "黑子", "777");
+           mapper.updateUser(user);
+           //增删改一定要提交事务
+           sqlSession.commit();
+           //关闭sqlSession
+           sqlSession.close();
+       }
+   }
+   ```
+
+### 3.5. Delete
+
+1. 编写接口
+
+   ```java
+        public interface UserMapper {
+        ...
+           //删除用户
+           int deleteUser(int id);
+        ...
+        }
+   ```
+
+2. 编写对应的mapper中的sql语句
+
+   ```xml
+       <!--删除用户-->
+       <delete id="deleteUser" parameterType="int">
+           delete
+           from USER
+           where ID = #{id}
+       </delete>
+   ```
+
+3. 测试
+
+   ```java
+       @Test
+       public void test_deleteUser() {
+           SqlSession sqlSession = MybatisUtils.getSqlSession();
+           UserDao mapper = sqlSession.getMapper(UserDao.class);
+           mapper.deleteUser(5);
+           //增删改一定要提交事务
+           sqlSession.commit();
+           //关闭sqlSession
+           sqlSession.close();
+       }
+   ```
+
+### 3.6. 万能Map
 
 假设，我们的实体类，或者数据库中的表，字段或者参数过多，我们应该考虑使用Map!
 
@@ -287,21 +384,21 @@ public void addUser2(Map<String,Object> map);
 1. UserMapper.xml
 
 ```xml
-<!--对象中的属性可以直接取出来 传递map的key-->
-<insert id="addUser2" parameterType="map">
-    insert into user (id,name,password) values (#{userid},#{username},#{userpassword})
-</insert>
+    <!--对象中的属性可以直接取出来 传递map的key-->
+    <insert id="addUser2" parameterType="map">
+        insert into USER (ID,NAME,PWD) values (#{userid},#{username},#{userpassword})
+    </insert>
 ```
 
 1. 测试
 
 ```java
     @Test
-    public void test3(){
+    public void test_addUser2(){
         SqlSession sqlSession = MybatisUtils.getSqlSession();
-        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
-        HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put("userid",4);
+        UserDao mapper = sqlSession.getMapper(UserDao.class);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("userid",5);
         map.put("username","王虎");
         map.put("userpassword",789);
         mapper.addUser2(map);
@@ -320,7 +417,7 @@ public void addUser2(Map<String,Object> map);
 >
 > 多个参数用Map , **或者注解！**
 
-### 7. 模糊查询
+### 3.7. 模糊查询
 
 模糊查询这么写？
 

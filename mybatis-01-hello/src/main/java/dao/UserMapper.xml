@@ -5,9 +5,42 @@
 <!--namespace绑定一个对应的mapper接口-->
 <mapper namespace="dao.UserDao">
 
-    <!--id方法名-->
+    <!--查询所有用户-->
     <select id="getUserList" resultType="pojo.User">
-        SELECT * FROM USER
+        SELECT *
+        FROM USER
     </select>
 
+    <!--根据ID查询用户-->
+    <select id="getUserByID" parameterType="int" resultType="pojo.User">
+        SELECT *
+        FROM USER
+        where ID = #{id}
+    </select>
+
+    <!--插入用户-->
+    <insert id="addUser" parameterType="pojo.User">
+        insert into USER (ID, NAME, PWD)
+        values (#{id}, #{name}, #{pwd})
+    </insert>
+
+    <!--更新用户-->
+    <update id="updateUser" parameterType="pojo.User">
+        update USER
+        set NAME=#{name},
+            PWD=#{pwd}
+        where ID = #{id};
+    </update>
+
+    <!--删除用户-->
+    <delete id="deleteUser" parameterType="int">
+        delete
+        from USER
+        where ID = #{id}
+    </delete>
+
+    <!--对象中的属性可以直接取出来 传递map的key-->
+    <insert id="addUser2" parameterType="map">
+        insert into USER (ID,NAME,PWD) values (#{userid},#{username},#{userpassword})
+    </insert>
 </mapper>
