@@ -43,6 +43,11 @@
     </environments>
     <!--映射器（mappers）-->
     <mappers>
-        <mapper resource="dao/UserMapper.xml"/>
+        <!-- 方式一：【推荐使用】-->
+         <mapper resource="dao/UserMapper.xml"/>
+        <!-- 方式二：使用class文件绑定注册-->
+        <!-- <mapper class="dao.UserMapper"/>-->
+        <!-- 方式三：使用包扫描进行注入-->
+        <!-- <package name="dao"/>-->
     </mappers>
 </configuration>

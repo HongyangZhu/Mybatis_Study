@@ -581,7 +581,7 @@ MapperRegistry：注册绑定我们的Mapper文件；
 ```xml
 <!--每一个Mapper.xml都需要在MyBatis核心配置文件中注册-->
 <mappers>
-    <mapper resource="com/kuang/dao/UserMapper.xml"/>
+    <mapper resource="dao/UserMapper.xml"/>
 </mappers>
 ```
 
@@ -590,22 +590,22 @@ MapperRegistry：注册绑定我们的Mapper文件；
 ```xml
 <!--每一个Mapper.xml都需要在MyBatis核心配置文件中注册-->
 <mappers>
-    <mapper class="com.kuang.dao.UserMapper"/>
+    <mapper class="dao.UserMapper"/>
 </mappers>
 ```
-
-**注意点：**
-
-- 接口和他的Mapper配置文件必须同名
-- 接口和他的Mapper配置文件必须在同一个包下
 
 方式三：使用包扫描进行注入
 
 ```xml
 <mappers>
-    <package name="com.kuang.dao"/>
+    <package name="dao"/>
 </mappers>
 ```
+
+**方式二和方式三的注意点：**
+
+- 接口和他的`Mapper.xml`配置文件必须同名
+- 接口和他的`Mapper.xml`配置文件必须在同一个包下
 
 ### 4.8. 作用域和生命周期
 

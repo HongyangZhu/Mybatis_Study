@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!--namespace绑定一个对应的mapper接口-->
-<mapper namespace="dao.UserDao">
+<mapper namespace="dao.UserMapper">
 
     <!--查询所有用户-->
     <select id="getUserList" resultType="user">
