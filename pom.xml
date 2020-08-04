@@ -11,6 +11,7 @@
     <modules>
         <module>mybatis-01-hello</module>
         <module>mybatis-02-config</module>
+        <module>mybatis-03-log</module>
     </modules>
 
     <dependencies>

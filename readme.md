@@ -666,7 +666,7 @@ MapperRegistry：注册绑定我们的Mapper文件；
 
 ### 5.2. resultMap
 
-结果集映射
+[结果集映射](https://mybatis.org/mybatis-3/zh/sqlmap-xml.html#Result_Maps)
 
 > 数据库中字段名：id name pwd
 >
@@ -716,7 +716,7 @@ MapperRegistry：注册绑定我们的Mapper文件；
 
 在MyBatis中具体使用哪一个日志实现，在设置中设定
 
-**STDOUT_LOGGING**
+**创建mybatis-config.xml文件，并配置stdout-logging**
 
 ```xml
 <settings>
@@ -774,17 +774,37 @@ MapperRegistry：注册绑定我们的Mapper文件；
 
 3. 配置settings为log4j实现
 
+   ```xml
+   <settings>
+       <setting name="logImpl" value="LOG4J"/>
+   </settings>
+   ```
+
 4. 测试运行
 
 **Log4j简单使用**
+
+```java
+import org.apache.log4j.Logger;
+import org.junit.Test;
+
+public class Log4jTest {
+    static Logger logger = Logger.getLogger(Log4jTest.class);
+
+    @Test
+    public void test() {
+        logger.info("info: 测试log4j");
+        logger.debug("debug: 测试log4j");
+        logger.error("error:测试log4j");
+    }
+}
+```
 
 1. 在要使用Log4j的类中，导入包 import org.apache.log4j.Logger;
 
 2. 日志对象，参数为当前类的class对象
 
-   ```java
-   Logger logger = Logger.getLogger(UserDaoTest.class);
-   ```
+  `static Logger logger = Logger.getLogger(Log4jTest.class); `
 
 3. 日志级别
 
