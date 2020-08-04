@@ -832,51 +832,67 @@ SELECT * from user limit startIndex,pageSize
 
 **使用MyBatis实现分页，核心SQL**
 
-1. 接口
+1. UserMapper接口
 
    ```java
-   //分页
-   List<User> getUserByLimit(Map<String,Integer> map);
+   package dao;
+   
+   import pojo.User;
+   
+   import java.util.List;
+   import java.util.Map;
+   
+   public interface UserMapper {
+       //分页
+       List<User> getUserByLimit(Map<String,Integer> map);
+   }
    ```
 
-2. Mapper.xml
+2. UserMapper.xml
 
    ```xml
+   <!--结果集映射-->
+   <resultMap id="UserMap" type="pojo.User">
+       <!--column数据库中的字段，property实体类中的属性-->
+       <result column="ID" property="id"/>
+       <result column="NAME" property="name"/>
+       <result column="PWD" property="password"/>
+   </resultMap>
    <!--分页查询-->
    <select id="getUserByLimit" parameterType="map" resultMap="UserMap">
-       select * from user limit #{startIndex},#{pageSize}
+       select * from USER limit #{startIndex},#{pageSize}
    </select>
    ```
 
 3. 测试
 
    ```java
-       @Test
-       public void getUserByLimit(){
-           SqlSession sqlSession = utils.MybatisUtils.getSqlSession();
-           UserMapper mapper = sqlSession.getMapper(UserMapper.class);
-           HashMap<String, Integer> map = new HashMap<String, Integer>();
-           map.put("startIndex",1);
-           map.put("pageSize",2);
-           List<User> list = mapper.getUserByLimit(map);
-           for (User user : list) {
-               System.out.println(user);
-           }
+   @Test
+   public void getUserByLimit(){
+       SqlSession sqlSession = utils.MybatisUtils.getSqlSession();
+       UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+       HashMap<String, Integer> map = new HashMap<String, Integer>();
+       map.put("startIndex",1);
+       map.put("pageSize",2);
+       List<User> list = mapper.getUserByLimit(map);
+       for (User user : list) {
+           System.out.println(user);
        }
+   }
    ```
 
 ### 7.2 RowBounds分页
 
 不再使用SQL实现分页
 
-1. 接口
+1. UserMapper接口
 
    ```xml
    //分页2
    List<User> getUserByRowBounds();
    ```
 
-2. mapper.xml
+2. UserMapper.xml
 
    ```xml
    <!--分页查询2-->
@@ -888,17 +904,17 @@ SELECT * from user limit startIndex,pageSize
 3. 测试
 
    ```java
-       public void getUserByRowBounds(){
-           SqlSession sqlSession = utils.MybatisUtils.getSqlSession();
-           //RowBounds实现
-           RowBounds rowBounds = new RowBounds(1, 2);
-           //通过Java代码层面实现分页
-           List<User> userList = sqlSession.selectList("com.kaung.dao.UserMapper.getUserByRowBounds", null, rowBounds);
-           for (User user : userList) {
-               System.out.println(user);
-           }
-           sqlSession.close();
+   public void getUserByRowBounds(){
+       SqlSession sqlSession = utils.MybatisUtils.getSqlSession();
+       //RowBounds实现
+       RowBounds rowBounds = new RowBounds(1, 2);
+       //通过Java代码层面实现分页
+       List<User> userList = sqlSession.selectList("com.kaung.dao.UserMapper.getUserByRowBounds", null, rowBounds);
+       for (User user : userList) {
+           System.out.println(user);
        }
+       sqlSession.close();
+   }
    ```
 
 ### 7.3 分页插件
