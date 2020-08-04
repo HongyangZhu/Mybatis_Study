@@ -933,44 +933,22 @@ SELECT * from user limit startIndex,pageSize
 
 ### 8.2 使用注解开发
 
-1. 注解在接口`UserMapper`上实现
+1. 注解在接口上实现
 
    ```java
-   package dao;
-   
-   import org.apache.ibatis.annotations.Select;
-   import pojo.User;
-   
-   import java.util.List;
-   
-   public interface UserMapper {
-       @Select("select * from user")
-       List<User> getUsers();
-   }
-   
+   @Select("select * from user")
+   List<User> getUsers();
    ```
 
-2. 需要在核心配置文件`mybatis-config.xml`中绑定接口
+2. 需要在核心配置文件中绑定接口
 
    ```xml
    <mappers>
-       <mapper class="dao.UserMapper"/>
+       <mapper class="com.kuang.dao.UserMapper"/>
    </mappers>
    ```
 
 3. 测试
-
-   ```java
-   @Test
-   public void getUserByLimit() {
-       SqlSession sqlSession = utils.MybatisUtils.getSqlSession();
-       UserMapper mapper = sqlSession.getMapper(UserMapper.class);
-       List<User> list = mapper.getUsers();
-       for (User user : list) {
-           System.out.println(user);
-       }
-   }
-   ```
 
 本质：反射机制实现
 
@@ -983,51 +961,19 @@ SELECT * from user limit startIndex,pageSize
 ### 8.3 注解CURD
 
 ```java
-package dao;
-
-import org.apache.ibatis.annotations.*;
-import pojo.User;
-
-import java.util.List;
-
-public interface UserMapper {
-    //查询所有用户
-    @Select("select * from USER")
-    List<User> getUserList();
-
-    //根据ID查询用户
-    @Select("select * from USER where ID= #{id} and NAME= #{name}")
-    User getUserById(@Param("id") int id, @Param("name") String name);
-
-    //插入用户
-    @Insert("insert into USER (ID, NAME, PWD)  values (#{id}, #{name}, #{pwd})")
-    int addUser(User user);
-
-    //更新用户
-    @Update("update USER set NAME=#{name}, PWD=#{pwd} where ID = #{id}")
-    int updateUser(User user);
-
-    //删除用户
-    @Delete(" delete from USER where ID = #{id}")
-    int deleteUser(int id);
-
-}
+//方法存在多个参数，所有的参数前面必须加上@Param("id")注解
+@Delete("delete from user where id = ${uid}")
+int deleteUser(@Param("uid") int id);
 ```
 
 **关于@Param( )注解**
 
 - 基本类型的参数或者String类型，需要加上
-
 - 引用类型不需要加
-
 - 如果只有一个基本类型的话，可以忽略，但是建议大家都加上
-
 - 我们在SQL中引用的就是我们这里的@Param()中设定的属性名
 
-  ```java
-  @Select("select * from USER where ID= #{id} and NAME= #{name}")
-  User getUserById(@Param("id") int id, @Param("name") String name);
-  ```
+**#{} 和 ${}**
 
 ## 9、Lombok
 
@@ -1055,11 +1001,9 @@ Lombok项目是一个Java库，它会自动插入编辑器和构建工具中，L
 @FieldNameConstants
 @ToString
 @EqualsAndHashCode
-@AllArgsConstructor 
-@NoArgsConstructor 
-@RequiredArgsConstructor and 
+@AllArgsConstructor, @RequiredArgsConstructor and @NoArgsConstructor
 @Log, @Log4j, @Log4j2, @Slf4j, @XSlf4j, @CommonsLog, @JBossLog, @Flogger, @CustomLog
-@Data  
+@Data
 @Builder
 @SuperBuilder
 @Singular
@@ -1075,9 +1019,9 @@ Lombok项目是一个Java库，它会自动插入编辑器和构建工具中，L
 说明：
 
 ```java
-@Data //无参构造，get，set，tostring，hashcode，equals
-@AllArgsConstructor //有参构造
-@NoArgsConstructor //无参构造
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
     private int id;
     private String name;

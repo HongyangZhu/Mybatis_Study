@@ -13,7 +13,6 @@
         <module>mybatis-02-config</module>
         <module>mybatis-03-log</module>
         <module>mybatis-04-limit</module>
-        <module>mybatis-05-annotation</module>
     </modules>
 
     <dependencies>
