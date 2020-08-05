@@ -1269,18 +1269,21 @@ public class Teacher2 {
 
 ```xml
 <!--按结果嵌套查询-->
-<select id="getTeacher" resultMap="StudentTeacher">
-    SELECT s.id sid, s.name sname,t.name tname,t.id tid FROM student s, teacher t
-    WHERE s.tid = t.id AND tid = #{tid}
+<select id="getTeacherALL" resultMap="StudentTeacher">
+    SELECT s.id sid, s.name sname, t.name tname, t.id tid
+    FROM student s,
+    teacher t
+    WHERE s.tid = t.id
+    AND tid = #{tid}
 </select>
-<resultMap id="StudentTeacher" type="Teacher">
+<resultMap id="StudentTeacher" type="pojo.Teacher2">
     <result property="id" column="tid"/>
     <result property="name" column="tname"/>
     <!--复杂的属性，我们需要单独处理 对象：association 集合：collection
-    javaType=""指定属性的类型！
-    集合中的泛型信息，我们使用ofType获取
-    -->
-    <collection property="students" ofType="Student">
+        javaType=""指定属性的类型！
+        集合中的泛型信息，我们使用ofType获取
+        -->
+    <collection property="students" ofType="pojo.Student2">
         <result property="id" column="sid"/>
         <result property="name" column="sname"/>
         <result property="tid" column="tid"/>

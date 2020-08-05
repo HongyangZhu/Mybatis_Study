@@ -4,6 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dao.TeacherMapper">
 
+    <!--按结果嵌套查询-->
     <select id="getTeacherALL" resultMap="StudentTeacher">
         SELECT s.id sid, s.name sname, t.name tname, t.id tid
         FROM student s,
