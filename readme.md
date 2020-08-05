@@ -1251,19 +1251,17 @@ alter table student ADD CONSTRAINT fk_tid foreign key (tid) references teacher(i
 
 ```java
 @Data
-public class Student {
+public class Student2 {
     private int id;
     private String name;
     private int tid;
 }
-123456
 @Data
-public class Teacher {
+public class Teacher2 {
     private int id;
     private String name;
-
     //一个老师拥有多个学生
-    private List<Student> students;
+    private List<Student2> students;
 }
 ```
 

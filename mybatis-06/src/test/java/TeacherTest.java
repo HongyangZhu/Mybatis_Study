@@ -10,4 +10,12 @@ public class TeacherTest {
         System.out.println(mapper.getTeacher(1));
         sqlSession.close();
     }
+
+    @Test
+    public void getTeacherALL() {
+        SqlSession sqlSession = utils.MybatisUtils.getSqlSession();
+        TeacherMapper mapper = sqlSession.getMapper(TeacherMapper.class);
+        System.out.println(mapper.getTeacherALL(1));
+        sqlSession.close();
+    }
 }
