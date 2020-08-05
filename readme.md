@@ -179,7 +179,7 @@ Dao层、Service层、Controller层
   - junit测试
 
     ```java
-        @Test
+        @TeacherTest
         public void test_getUserList() {
             //1.获取SqlSession对象
             SqlSession sqlSession = utils.MybatisUtils.getSqlSession();
@@ -270,7 +270,7 @@ namespace中的包名要和Dao/Mapper接口的包名一致
   3. 测试
         
         ```java
-            @Test
+            @TeacherTest
             public void test_addUser() {
                 SqlSession sqlSession = utils.MybatisUtils.getSqlSession();
                 UserDao mapper = sqlSession.getMapper(UserDao.class);
@@ -317,7 +317,7 @@ namespace中的包名要和Dao/Mapper接口的包名一致
 3. 测试
 
    ```java
-       @Test
+       @TeacherTest
        public void test_updateUser() {
            SqlSession sqlSession = utils.MybatisUtils.getSqlSession();
            UserDao mapper = sqlSession.getMapper(UserDao.class);
@@ -358,7 +358,7 @@ namespace中的包名要和Dao/Mapper接口的包名一致
 3. 测试
 
    ```java
-       @Test
+       @TeacherTest
        public void test_deleteUser() {
            SqlSession sqlSession = utils.MybatisUtils.getSqlSession();
            UserDao mapper = sqlSession.getMapper(UserDao.class);
@@ -393,7 +393,7 @@ public void addUser2(Map<String,Object> map);
 1. 测试
 
 ```java
-    @Test
+    @TeacherTest
     public void test_addUser2(){
         SqlSession sqlSession = utils.MybatisUtils.getSqlSession();
         UserDao mapper = sqlSession.getMapper(UserDao.class);
@@ -786,12 +786,12 @@ MapperRegistry：注册绑定我们的Mapper文件；
 
 ```java
 import org.apache.log4j.Logger;
-import org.junit.Test;
+import org.junit.TeacherTest;
 
 public class Log4jTest {
     static Logger logger = Logger.getLogger(Log4jTest.class);
 
-    @Test
+    @TeacherTest
     public void test() {
         logger.info("info: 测试log4j");
         logger.debug("debug: 测试log4j");
@@ -867,7 +867,7 @@ SELECT * from user limit startIndex,pageSize
 3. 测试
 
    ```java
-   @Test
+   @TeacherTest
    public void getUserByLimit(){
        SqlSession sqlSession = utils.MybatisUtils.getSqlSession();
        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
@@ -961,7 +961,7 @@ SELECT * from user limit startIndex,pageSize
 3. 测试
 
    ```java
-   @Test
+   @TeacherTest
    public void getUserByLimit() {
        SqlSession sqlSession = utils.MybatisUtils.getSqlSession();
        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
@@ -1091,6 +1091,33 @@ public class User {
 
 > 多个学生一个老师；
 
+学生表（student）
+
+老师表（teacher）
+
+```sql
+CREATE TABLE teacher
+(
+    id   int(10) not null primary key,
+    name varchar(30) default null
+);
+
+INSERT INTO mybatis.teacher (id, name) VALUES (1, 'Tom');
+
+CREATE TABLE student
+(
+    id   int(10) not null primary key,
+    name varchar(30) default null,
+    tid  int(10)     default null,
+    FOREIGN KEY (tid) REFERENCES teacher (id)
+);
+
+INSERT INTO mybatis.student (id, name, tid) VALUES (1, 'Bill', 1);
+INSERT INTO mybatis.student (id, name, tid) VALUES (2, 'Jack', 1);
+```
+
+
+
 ```sql
 alter table student ADD CONSTRAINT fk_tid foreign key (tid) references teacher(id)
 ```
@@ -1098,32 +1125,90 @@ alter table student ADD CONSTRAINT fk_tid foreign key (tid) references teacher(i
 ### **1. 测试环境搭建**
 
 1. 导入lombok
+
+   ```xml
+   <dependency>
+       <groupId>org.projectlombok</groupId>
+       <artifactId>lombok</artifactId>
+       <version>1.18.12</version>
+   </dependency>
+   ```
+
 2. 新建实体类Teacher,Student
+
+   ```java
+   package pojo;
+   
+   import lombok.AllArgsConstructor;
+   import lombok.Data;
+   import lombok.NoArgsConstructor;
+   
+   @Data
+   @AllArgsConstructor
+   @NoArgsConstructor
+   public class Teacher {
+       private int id;
+       private String name;
+   }
+   
+   ```
+
+   ```java
+   package pojo;
+   
+   import lombok.AllArgsConstructor;
+   import lombok.Data;
+   import lombok.NoArgsConstructor;
+   
+   @Data
+   @AllArgsConstructor
+   @NoArgsConstructor
+   public class Student {
+       private int id;
+       private String name;
+       private Teacher teacher;
+   }
+   
+   ```
+
 3. 建立Mapper接口
+
 4. 建立Mapper.xml文件
+
 5. 在核心配置文件中绑定注册我们的Mapper接口或者文件 【方式很多，随心选】
+
 6. 测试查询是否能够成功
 
 ### 2. 按照查询嵌套处理
 
 ```xml
-<!--
-     思路：
-        1. 查询所有的学生信息
-        2. 根据查询出来的学生的tid寻找特定的老师 (子查询)
-    -->
-<select id="getStudent" resultMap="StudentTeacher">
-    select * from student
-</select>
-<resultMap id="StudentTeacher" type="student">
-    <result property="id" column="id"/>
-    <result property="name" column="name"/>
-    <!--复杂的属性，我们需要单独出来 对象：association 集合：collection-->
-    <collection property="teacher" column="tid" javaType="teacher" select="getTeacher"/>
-</resultMap>
-<select id="getTeacher" resultType="teacher">
-    select * from teacher where id = #{id}
-</select>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.StudentMapper">
+    <!--
+         思路：
+            1. 查询所有的学生信息
+            2. 根据查询出来的学生的tid寻找特定的老师 (子查询)
+        -->
+    <select id="getStudent" resultMap="StudentTeacher">
+        select *
+        from student
+    </select>
+    <resultMap id="StudentTeacher" type="student">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <!--复杂的属性，我们需要单独出来 对象：association 集合：collection-->
+        <collection property="teacher" column="tid" javaType="teacher" select="getTeacher"/>
+    </resultMap>
+    <select id="getTeacher" resultType="teacher">
+        select *
+        from teacher
+        where id = #{id}
+    </select>
+
+</mapper>
 ```
 
 ### 3.按照结果嵌套处理
@@ -1373,7 +1458,7 @@ CREATE TABLE `mybatis`.`blog`  (
 2. 测试在一个Session中查询两次记录
 
    ```java
-       @Test
+       @TeacherTest
        public void test1() {
            SqlSession sqlSession = utils.MybatisUtils.getSqlSession();
            UserMapper mapper = sqlSession.getMapper(UserMapper.class);
