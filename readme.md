@@ -1192,17 +1192,19 @@ alter table student ADD CONSTRAINT fk_tid foreign key (tid) references teacher(i
             1. 查询所有的学生信息
             2. 根据查询出来的学生的tid寻找特定的老师 (子查询)
         -->
-    <select id="getStudent" resultMap="StudentTeacher">
+    <select id="getStudentALL" resultMap="StudentTeacher">
         select *
         from student
     </select>
-    <resultMap id="StudentTeacher" type="student">
+    <resultMap id="StudentTeacher" type="pojo.Student">
         <result property="id" column="id"/>
         <result property="name" column="name"/>
         <!--复杂的属性，我们需要单独出来 对象：association 集合：collection-->
-        <collection property="teacher" column="tid" javaType="teacher" select="getTeacher"/>
+        <association property="teacher" column="tid" javaType="pojo.Teacher" select="getTeacher"/>
+<!--        <collection property="teacher" column="tid" javaType="pojo.Teacher" select="getTeacher"/>-->
     </resultMap>
-    <select id="getTeacher" resultType="teacher">
+
+    <select id="getTeacher" resultType="pojo.Teacher">
         select *
         from teacher
         where id = #{id}
@@ -1214,20 +1216,22 @@ alter table student ADD CONSTRAINT fk_tid foreign key (tid) references teacher(i
 ### 3.按照结果嵌套处理
 
 ```xml
-    <!--按照结果进行查询-->
-    <select id="getStudent2" resultMap="StudentTeacher2">
-        select s.id sid , s.name sname, t.name tname
-        from student s,teacher t
-        where s.tid=t.id
-    </select>
-    <!--结果封装，将查询出来的列封装到对象属性中-->
-    <resultMap id="StudentTeacher2" type="student">
-        <result property="id" column="sid"/>
-        <result property="name" column="sname"/>
-        <association property="teacher" javaType="teacher">
-            <result property="name" column="tname"></result>
-        </association>
-    </resultMap>
+<!--按照结果进行查询-->
+<select id="getStudentALL2" resultMap="StudentTeacher2">
+    select s.id sid, s.name sname, t.name tname
+    from student s,
+    teacher t
+    where s.tid = t.id
+</select>
+
+<!--结果封装，将查询出来的列封装到对象属性中-->
+<resultMap id="StudentTeacher2" type="pojo.Student">
+    <result property="id" column="sid"/>
+    <result property="name" column="sname"/>
+    <association property="teacher" javaType="pojo.Teacher">
+        <result property="name" column="tname"/>
+    </association>
+</resultMap>
 ```
 
 回顾Mysql多对一查询方式:
