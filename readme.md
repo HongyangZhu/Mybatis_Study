@@ -1357,6 +1357,20 @@ CREATE TABLE `mybatis`.`blog`  (
 
 4. 编写实体类对应`Mapper接口`和`Mapper.xml`文件
 
+5. ID工具类
+
+   ```java
+   package utils;
+   
+   import java.util.UUID;
+   
+   public class ID_Utils {
+       public static String getID() {
+           return UUID.randomUUID().toString().replaceAll("-", "");
+       }
+   }
+   ```
+
 ### IF
 
 ```xml

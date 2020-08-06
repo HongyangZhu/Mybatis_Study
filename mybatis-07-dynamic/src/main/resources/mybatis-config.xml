@@ -12,6 +12,8 @@
     </properties>
     <settings>
         <setting name="logImpl" value="STDOUT_LOGGING"/>
+        <!--开启驼峰命名转换-->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
     </settings>
     <!--环境配置（environments）-->
     <environments default="home">
