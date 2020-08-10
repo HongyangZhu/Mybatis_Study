@@ -17,7 +17,7 @@
     </settings>
     <!--环境配置（environments）-->
     <environments default="home">
-        <environment id="company">
+        <environment id="home">
             <!--事务管理器（transactionManager）
             在 MyBatis 中有两种类型的事务管理器（也就是 type="[JDBC|MANAGED]"）-->
             <transactionManager type="JDBC"/>
@@ -44,9 +44,9 @@
     <!--映射器（mappers）-->
     <mappers>
         <!-- 方式一：【推荐使用】-->
-        <mapper resource="dao/BlogMapper.xml"/>
+        <!--<mapper resource="dao/BlogMapper.xml"/>-->
         <!-- 方式二：使用class文件绑定注册-->
-        <!-- <mapper class="dao.UserMapper"/>-->
+         <mapper class="dao.BlogMapper"/>
         <!-- 方式三：使用包扫描进行注入-->
         <!-- <package name="dao"/>-->
     </mappers>

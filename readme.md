@@ -1326,10 +1326,10 @@ public class Teacher2 {
 
 ```sql
 CREATE TABLE `mybatis`.`blog`  (
-  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '博客id',
-  `title` varchar(30) NOT NULL COMMENT '博客标题',
+  `id` varchar(50) NOT NULL  COMMENT '博客id',
+  `title` varchar(100) NOT NULL COMMENT '博客标题',
   `author` varchar(30) NOT NULL COMMENT '博客作者',
-  `create_time` datetime(0) NOT NULL COMMENT '创建时间',
+  `create_time` Date NOT NULL COMMENT '创建时间',
   `views` int(30) NOT NULL COMMENT '浏览量',
   PRIMARY KEY (`id`)
 )
@@ -1387,7 +1387,61 @@ CREATE TABLE `mybatis`.`blog`  (
 </select>
 ```
 
+```java
+@Test
+public void queryBlogIF_test() {
+    SqlSession session = MybatisUtils.getSqlSession();
+    BlogMapper mapper = session.getMapper(BlogMapper.class);
+    HashMap<String, String> map01 = new HashMap<>();
+    map01.put("title", "This is Title01");
+    List<Blog> blogs = mapper.queryBlogIF(map01);
+    for (Blog blog : blogs) {
+        System.out.println(blog.toString());
+    }
+    session.close();
+}
+```
+
+
+
 ### choose (when, otherwise)
+
+```xml
+<select id="queryBlogChoose" parameterType="map" resultType="pojo.Blog">
+    select id, title, author, create_time, views
+    from blog
+    <where>
+        <choose>
+            <when test="title!=null">
+                and title = #{title}
+            </when>
+            <when test="author!=null">
+                and author = #{author}
+            </when>
+            <otherwise>
+                and views=#{views}
+            </otherwise>
+        </choose>
+    </where>
+</select>
+```
+
+```java
+@Test
+public void queryBlogChoose_test() {
+    SqlSession session = MybatisUtils.getSqlSession();
+    BlogMapper mapper = session.getMapper(BlogMapper.class);
+    HashMap<String, String> map01 = new HashMap<>();
+    map01.put("views", "9999");
+    List<Blog> blogs = mapper.queryBlogChoose(map01);
+    for (Blog blog : blogs) {
+        System.out.println(blog.toString());
+    }
+    session.close();
+}
+```
+
+
 
 ### trim、where、set
 
