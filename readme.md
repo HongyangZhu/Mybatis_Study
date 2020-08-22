@@ -1,4 +1,7 @@
 # MyBatis
+
+![在这里插入图片描述](https://img-blog.csdnimg.cn/2020062316463790.png)
+
 * 1. [简介](#)
 	* 1.1. [什么是Mybatis](#Mybatis)
 	* 1.2. [持久化](#-1)
@@ -64,8 +67,6 @@
 ##  1. <a name=''></a>1、简介
 
 ###  1.1. <a name='Mybatis'></a>1.1 什么是Mybatis
-
-![在这里插入图片描述](https://img-blog.csdnimg.cn/2020062316463790.png)
 
 - **MyBatis 是一款优秀的持久层框架;**
 - 它支持自定义 SQL、存储过程以及高级映射。MyBatis 免除了几乎所有的 JDBC 代码以及设置参数和获取结果集的工作。MyBatis 可以通过简单的 XML 或注解来配置和映射原始类型、接口和 Java POJO（Plain Old Java Objects，普通老式 Java 对象）为数据库中的记录。
