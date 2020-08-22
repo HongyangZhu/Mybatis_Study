@@ -1,15 +1,76 @@
 # MyBatis
+* 1. [简介](#)
+	* 1.1. [什么是Mybatis](#Mybatis)
+	* 1.2. [持久化](#-1)
+	* 1.3. [持久层](#-1)
+	* 1.4. [为什么需要MyBatis](#MyBatis)
+* 2. [第一个Mybatis程序](#Mybatis-1)
+	* 2.1. [搭建环境](#-1)
+	* 2.2. [创建一个模块](#-1)
+	* 2.3. [编写代码](#-1)
+* 3. [CURD](#CURD)
+	* 3.1. [namespace](#namespace)
+	* 3.2. [select](#select)
+	* 3.3. [Insert](#Insert)
+	* 3.4. [update](#update)
+	* 3.5. [Delete](#Delete)
+	* 3.6. [万能Map](#Map)
+	* 3.7. [模糊查询](#-1)
+* 4. [配置解析](#-1)
+	* 4.1. [核心配置文件](#-1)
+	* 4.2. [环境配置 environments](#environments)
+	* 4.3. [属性 properties](#properties)
+	* 4.4. [类型别名 typeAliases](#typeAliases)
+	* 4.5. [设置 Settings](#Settings)
+	* 4.6. [其他配置](#-1)
+	* 4.7. [映射器 mappers](#mappers)
+	* 4.8. [作用域和生命周期](#-1)
+* 5. [解决属性名和字段名不一致的问题](#-1)
+	* 5.1. [5问题](#-1)
+	* 5.2. [5resultMap](#resultMap)
+* 6. [日志](#-1)
+	* 6.1. [日志工厂](#-1)
+	* 6.2. [Log4j](#Log4j)
+* 7. [分页](#-1)
+	* 7.1. [**使用Limit分页**](#Limit)
+	* 7.2. [RowBounds分页](#RowBounds)
+	* 7.3. [分页插件](#-1)
+* 8. [使用注解开发](#-1)
+	* 8.1. [面向接口开发](#-1)
+	* 8.2. [使用注解开发](#-1)
+	* 8.3. [注解CURD](#CURD-1)
+* 9. [Lombok](#Lombok)
+* 10. [多对一处理](#-1)
+	* 10.1. [测试环境搭建](#1.)
+	* 10.2. [按照查询嵌套处理](#-1)
+	* 10.3. [按照结果嵌套处理](#-1)
+* 11. [一对多处理](#-1)
+	* 11.1. [环境搭建](#-1)
+	* 11.2. [按照结果嵌套嵌套处理](#-1)
+	* 11.3. [小结](#-1)
+* 12. [动态SQL](#SQL)
+	* 12.1. [1.搭建环境](#-1)
+	* 12.2. [IF](#IF)
+	* 12.3. [choose (when, otherwise)](#choosewhenotherwise)
+	* 12.4. [trim、where、set](#trimwhereset)
+* 13. [缓存](#-1)
+	* 13.1. [简介](#-1)
+	* 13.2. [MyBatis缓存](#MyBatis-1)
+	* 13.3. [一级缓存](#-1)
+	* 13.4. [二级缓存](#-1)
+	* 13.5. [缓存原理](#-1)
+	* 13.6. [自定义缓存-ehcache](#ehcache)
 
-## 1、简介
+##  1. <a name=''></a>1、简介
 
-### 1.1 什么是Mybatis
+###  1.1. <a name='Mybatis'></a>1.1 什么是Mybatis
 
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/2020062316463790.png)
 
 - **MyBatis 是一款优秀的持久层框架;**
 - 它支持自定义 SQL、存储过程以及高级映射。MyBatis 免除了几乎所有的 JDBC 代码以及设置参数和获取结果集的工作。MyBatis 可以通过简单的 XML 或注解来配置和映射原始类型、接口和 Java POJO（Plain Old Java Objects，普通老式 Java 对象）为数据库中的记录。
 
-### 1.2 持久化
+###  1.2. <a name='-1'></a>1.2 持久化
 
 数据持久化
 
@@ -22,14 +83,14 @@
 - 有一些对象，不能让他丢掉
 - 内存太贵
 
-### 1.3 持久层
+###  1.3. <a name='-1'></a>1.3 持久层
 
 Dao层、Service层、Controller层
 
 - 完成持久化工作的代码块
 - 层界限十分明显
 
-### 1.4 为什么需要MyBatis
+###  1.4. <a name='MyBatis'></a>1.4 为什么需要MyBatis
 
 - 帮助程序员将数据存入到数据库中
 - 方便
@@ -43,11 +104,11 @@ Dao层、Service层、Controller层
   - 提供对象关系映射标签，支持对象关系组建维护
   - 提供xml标签，支持编写动态sql
 
-## 2、第一个Mybatis程序
+##  2. <a name='Mybatis-1'></a>2、第一个Mybatis程序
 
 思路：搭建环境 --> 导入MyBatis --> 编写代码 --> 测试
 
-### 2.1 搭建环境
+###  2.1. <a name='-1'></a>2.1 搭建环境
 
 新建项目
 
@@ -84,7 +145,7 @@ Dao层、Service层、Controller层
    
 4. 创建一个Module
 
-### 2.2 创建一个模块
+###  2.2. <a name='-1'></a>2.2 创建一个模块
 
 - 编写mybatis的核心配置文件
 
@@ -136,7 +197,7 @@ Dao层、Service层、Controller层
   }
   ```
 
-### 2.3 编写代码
+###  2.3. <a name='-1'></a>2.3 编写代码
 
 - 实体类
 
@@ -203,13 +264,13 @@ Dao层、Service层、Controller层
 4. 返回类型不对
 5. Maven导出资源问题
 
-## 3、CURD
+##  3. <a name='CURD'></a>3、CURD
 
-### 3.1. namespace
+###  3.1. <a name='namespace'></a>3.1. namespace
 
 namespace中的包名要和Dao/Mapper接口的包名一致
 
-### 3.2. select
+###  3.2. <a name='select'></a>3.2. select
 
 选择，查询语句；
 
@@ -244,7 +305,7 @@ namespace中的包名要和Dao/Mapper接口的包名一致
 
 - parameterType : 参数类型；
 
-### 3.3. Insert
+###  3.3. <a name='Insert'></a>3.3. Insert
 
 - 1. 编写接口
     
@@ -289,7 +350,7 @@ namespace中的包名要和Dao/Mapper接口的包名一致
         sqlSession.commit();
       ```
 
-### 3.4. update
+###  3.4. <a name='update'></a>3.4. update
 
 1. 编写接口
 
@@ -331,7 +392,7 @@ namespace中的包名要和Dao/Mapper接口的包名一致
    }
    ```
 
-### 3.5. Delete
+###  3.5. <a name='Delete'></a>3.5. Delete
 
 1. 编写接口
 
@@ -370,7 +431,7 @@ namespace中的包名要和Dao/Mapper接口的包名一致
        }
    ```
 
-### 3.6. 万能Map
+###  3.6. <a name='Map'></a>3.6. 万能Map
 
 假设，我们的实体类，或者数据库中的表，字段或者参数过多，我们应该考虑使用Map!
 
@@ -417,7 +478,7 @@ public void addUser2(Map<String,Object> map);
 >
 > 多个参数用Map , **或者注解！**
 
-### 3.7. 模糊查询
+###  3.7. <a name='-1'></a>3.7. 模糊查询
 
 模糊查询这么写？
 
@@ -440,11 +501,11 @@ public void addUser2(Map<String,Object> map);
    select * from user where name like "%"#{value}"%"
    ```
 
-## 4、配置解析
+##  4. <a name='-1'></a>4、配置解析
 
 > [具体参照官方文档](https://mybatis.org/mybatis-3/zh/configuration.html)
 
-### 4.1. 核心配置文件
+###  4.1. <a name='-1'></a>4.1. 核心配置文件
 
 - `mybatis-config.xml`
 
@@ -466,7 +527,7 @@ public void addUser2(Map<String,Object> map);
       mappers（映射器）
   ```
 
-### 4.2. 环境配置 environments
+###  4.2. <a name='environments'></a>4.2. 环境配置 environments
 
 MyBatis 可以配置成适应多种环境
 
@@ -481,7 +542,7 @@ MyBatis默认的事务管理器就是`JDBC` ，连接池：`POOLED`
 <dataSource type="POOLED">
 ```
 
-### 4.3. 属性 properties
+###  4.3. <a name='properties'></a>4.3. 属性 properties
 
 我们可以通过properties属性来实现引用配置文件
 
@@ -523,7 +584,7 @@ MyBatis默认的事务管理器就是`JDBC` ，连接池：`POOLED`
    - 可以在其中增加一些属性配置
    - 如果两个文件有同一个字段，`优先使用外部配置文件`
 
-### 4.4. 类型别名 typeAliases
+###  4.4. <a name='typeAliases'></a>4.4. 类型别名 typeAliases
 
 - 类型别名可为 Java 类型设置一个缩写名字。 它仅用于 XML 配置.
 
@@ -557,13 +618,13 @@ MyBatis默认的事务管理器就是`JDBC` ，连接池：`POOLED`
   }
   ```
 
-### 4.5. 设置 Settings
+###  4.5. <a name='Settings'></a>4.5. 设置 Settings
 
 这是 MyBatis 中极为重要的调整设置，它们会改变 MyBatis 的运行时行为。
 
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/2020062316474822.png)
 
-### 4.6. 其他配置
+###  4.6. <a name='-1'></a>4.6. 其他配置
 
 - [typeHandlers（类型处理器）](https://mybatis.org/mybatis-3/zh/configuration.html#typeHandlers)
 - [objectFactory（对象工厂）](https://mybatis.org/mybatis-3/zh/configuration.html#objectFactory)
@@ -572,7 +633,7 @@ MyBatis默认的事务管理器就是`JDBC` ，连接池：`POOLED`
   - mybatis-plus
   - 通用mapper
 
-### 4.7. 映射器 mappers
+###  4.7. <a name='mappers'></a>4.7. 映射器 mappers
 
 MapperRegistry：注册绑定我们的Mapper文件；
 
@@ -607,7 +668,7 @@ MapperRegistry：注册绑定我们的Mapper文件；
 - 接口和他的`Mapper.xml`配置文件必须同名
 - 接口和他的`Mapper.xml`配置文件必须在同一个包下
 
-### 4.8. 作用域和生命周期
+###  4.8. <a name='-1'></a>4.8. 作用域和生命周期
 
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200623164809990.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0RERERlbmdf,size_16,color_FFFFFF,t_70)
 
@@ -633,9 +694,9 @@ MapperRegistry：注册绑定我们的Mapper文件；
 
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200623164833872.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0RERERlbmdf,size_16,color_FFFFFF,t_70)
 
-## 5、解决属性名和字段名不一致的问题
+##  5. <a name='-1'></a>5、解决属性名和字段名不一致的问题
 
-### 5.1. 问题
+###  5.1. <a name='-1'></a>5.1. 问题
 
 数据库中的字段
 
@@ -664,7 +725,7 @@ MapperRegistry：注册绑定我们的Mapper文件；
 </select>
 ```
 
-### 5.2. resultMap
+###  5.2. <a name='resultMap'></a>5.2. resultMap
 
 [结果集映射](https://mybatis.org/mybatis-3/zh/sqlmap-xml.html#Result_Maps)
 
@@ -694,9 +755,9 @@ MapperRegistry：注册绑定我们的Mapper文件；
 - `ResultMap` 的优秀之处——你完全可以不用显式地配置它们。
 - 如果这个世界总是这么简单就好了。
 
-## 6、日志
+##  6. <a name='-1'></a>6、日志
 
-### 6.1 日志工厂
+###  6.1. <a name='-1'></a>6.1 日志工厂
 
 如果一个数据库操作，出现了异常，我们需要排错，日志就是最好的助手！
 
@@ -726,7 +787,7 @@ MapperRegistry：注册绑定我们的Mapper文件；
 
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/2020062316493391.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0RERERlbmdf,size_16,color_FFFFFF,t_70)
 
-### 6.2 Log4j
+###  6.2. <a name='Log4j'></a>6.2 Log4j
 
 什么是Log4j？
 
@@ -818,13 +879,13 @@ public class Log4jTest {
    2. debug
    3. error
 
-## 7、分页
+##  7. <a name='-1'></a>7、分页
 
 **思考：为什么分页？**
 
 - 减少数据的处理量
 
-### 7.1 **使用Limit分页**
+###  7.1. <a name='Limit'></a>7.1 **使用Limit分页**
 
 ```sql
 SELECT * from user limit startIndex,pageSize 
@@ -881,7 +942,7 @@ SELECT * from user limit startIndex,pageSize
    }
    ```
 
-### 7.2 RowBounds分页
+###  7.2. <a name='RowBounds'></a>7.2 RowBounds分页
 
 不再使用SQL实现分页
 
@@ -917,13 +978,13 @@ SELECT * from user limit startIndex,pageSize
    }
    ```
 
-### 7.3 分页插件
+###  7.3. <a name='-1'></a>7.3 分页插件
 
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200623164958936.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0RERERlbmdf,size_16,color_FFFFFF,t_70)
 
-## 8、使用注解开发
+##  8. <a name='-1'></a>8、使用注解开发
 
-### 8.1 面向接口开发
+###  8.1. <a name='-1'></a>8.1 面向接口开发
 
 **三个面向区别**
 
@@ -931,7 +992,7 @@ SELECT * from user limit startIndex,pageSize
 - 面向过程是指，我们考虑问题时，以一个具体的流程（事务过程）为单位，考虑它的实现；
 - 接口设计与非接口设计是针对复用技术而言的，与面向对象（过程）不是一个问题，更多的体现就是对系统整体的架构；
 
-### 8.2 使用注解开发
+###  8.2. <a name='-1'></a>8.2 使用注解开发
 
 1. 注解在接口`UserMapper`上实现
 
@@ -980,7 +1041,7 @@ SELECT * from user limit startIndex,pageSize
 **MyBatis详细执行流程**
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200623165030775.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0RERERlbmdf,size_16,color_FFFFFF,t_70#pic_center)
 
-### 8.3 注解CURD
+###  8.3. <a name='CURD-1'></a>8.3 注解CURD
 
 ```java
 package dao;
@@ -1029,7 +1090,7 @@ public interface UserMapper {
   User getUserById(@Param("id") int id, @Param("name") String name);
   ```
 
-## 9、Lombok
+##  9. <a name='Lombok'></a>9、Lombok
 
 Lombok项目是一个Java库，它会自动插入编辑器和构建工具中，Lombok提供了一组有用的注释，用来消除Java类中的大量样板代码。仅五个字符(@Data)就可以替换数百行代码从而产生干净，简洁且易于维护的Java类。
 
@@ -1087,7 +1148,7 @@ public class User {
 
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200623165052167.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0RERERlbmdf,size_16,color_FFFFFF,t_70)
 
-## 10、多对一处理
+##  10. <a name='-1'></a>10、多对一处理
 
 > 多个学生一个老师；
 
@@ -1122,7 +1183,7 @@ INSERT INTO mybatis.student (id, name, tid) VALUES (2, 'Jack', 1);
 alter table student ADD CONSTRAINT fk_tid foreign key (tid) references teacher(id)
 ```
 
-### **1. 测试环境搭建**
+###  10.1. <a name='1.'></a>**1. 测试环境搭建**
 
 1. 导入lombok
 
@@ -1179,7 +1240,7 @@ alter table student ADD CONSTRAINT fk_tid foreign key (tid) references teacher(i
 
 6. 测试查询是否能够成功
 
-### 2. 按照查询嵌套处理
+###  10.2. <a name='-1'></a>2. 按照查询嵌套处理
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -1213,7 +1274,7 @@ alter table student ADD CONSTRAINT fk_tid foreign key (tid) references teacher(i
 </mapper>
 ```
 
-### 3.按照结果嵌套处理
+###  10.3. <a name='-1'></a>3.按照结果嵌套处理
 
 ```xml
 <!--按照结果进行查询-->
@@ -1239,13 +1300,13 @@ alter table student ADD CONSTRAINT fk_tid foreign key (tid) references teacher(i
 - 子查询 （按照查询嵌套）
 - 联表查询 （按照结果嵌套）
 
-## 11、一对多处理
+##  11. <a name='-1'></a>11、一对多处理
 
 > 一个老师多个学生；
 >
 > 对于老师而言，就是一对多的关系；
 
-### 1. 环境搭建
+###  11.1. <a name='-1'></a>1. 环境搭建
 
 **实体类**
 
@@ -1265,7 +1326,7 @@ public class Teacher2 {
 }
 ```
 
-### 2. **按照结果嵌套嵌套处理**
+###  11.2. <a name='-1'></a>2. **按照结果嵌套嵌套处理**
 
 ```xml
 <!--按结果嵌套查询-->
@@ -1291,7 +1352,7 @@ public class Teacher2 {
 </resultMap>
 ```
 
-### 小结
+###  11.3. <a name='-1'></a>小结
 
 1. 关联 - association 【多对一】
 2. 集合 - collection 【一对多】
@@ -1312,7 +1373,7 @@ public class Teacher2 {
 - 索引
 - 索引优化
 
-## 12、动态SQL
+##  12. <a name='SQL'></a>12、动态SQL
 
 **什么是动态SQL：动态SQL就是根据不同的条件生成不同的SQL语句**
 
@@ -1322,7 +1383,7 @@ public class Teacher2 {
 
 > 动态 SQL 是 MyBatis 的强大特性之一。如果你使用过 JDBC 或其它类似的框架，你应该能理解根据不同条件拼接 SQL 语句有多痛苦，例如拼接时要确保不能忘记添加必要的空格，还要注意去掉列表最后一个列名的逗号。利用动态 SQL，可以彻底摆脱这种痛苦。
 
-### 1.搭建环境
+###  12.1. <a name='-1'></a>1.搭建环境
 
 ```sql
 CREATE TABLE `mybatis`.`blog`  (
@@ -1371,7 +1432,7 @@ CREATE TABLE `mybatis`.`blog`  (
    }
    ```
 
-### IF
+###  12.2. <a name='IF'></a>IF
 
 ```xml
 <select id="queryBlogIF" parameterType="map" resultType="blog">
@@ -1404,7 +1465,7 @@ public void queryBlogIF_test() {
 
 
 
-### choose (when, otherwise)
+###  12.3. <a name='choosewhenotherwise'></a>choose (when, otherwise)
 
 ```xml
 <select id="queryBlogChoose" parameterType="map" resultType="pojo.Blog">
@@ -1443,7 +1504,7 @@ public void queryBlogChoose_test() {
 
 
 
-### trim、where、set
+###  12.4. <a name='trimwhereset'></a>trim、where、set
 
 有的时候，我们可能会将一些功能的部分抽取出来，方便服用！
 
@@ -1482,9 +1543,9 @@ public void queryBlogChoose_test() {
 
 - 先在Mysql中写出完整的SQL，再对应的去修改成我们的动态SQL实现通用即可
 
-## 13、缓存
+##  13. <a name='-1'></a>13、缓存
 
-### 13.1 简介
+###  13.1. <a name='-1'></a>13.1 简介
 
 > 查询 ： 连接数据库，耗资源
 >
@@ -1500,7 +1561,7 @@ public void queryBlogChoose_test() {
 3. 什么样的数据可以使用缓存？
    - 经常查询并且不经常改变的数据 【可以使用缓存】
 
-### 13.2 MyBatis缓存
+###  13.2. <a name='MyBatis-1'></a>13.2 MyBatis缓存
 
 - MyBatis包含一个非常强大的查询缓存特性，它可以非常方便的定制和配置缓存，缓存可以极大的提高查询效率。
 
@@ -1516,7 +1577,7 @@ public void queryBlogChoose_test() {
   - 二级缓存需要手动开启和配置，他是基于namespace级别的缓存。
   - 为了提高可扩展性，MyBatis定义了缓存接口Cache。我们可以通过实现Cache接口来定义二级缓存。
 
-### 13.3 一级缓存
+###  13.3. <a name='-1'></a>13.3 一级缓存
 
 - 一级缓存也叫本地缓存：SqlSession
   - 与数据库同一次会话期间查询到的数据会放在本地缓存中
@@ -1561,7 +1622,7 @@ public void queryBlogChoose_test() {
    sqlSession.clearCache();
    ```
 
-### 13.4 二级缓存
+###  13.4. <a name='-1'></a>13.4 二级缓存
 
 - 二级缓存也叫全局缓存，一级缓存作用域太低了，所以诞生了二级缓存
 - 基于namespace级别的缓存，一个名称空间，对应一个二级缓存
@@ -1606,7 +1667,7 @@ public void queryBlogChoose_test() {
 - 所有的数据都会放在一级缓存中
 - 只有当前会话提交，或者关闭的时候，才会提交到二级缓存中
 
-### 13.5 缓存原理
+###  13.5. <a name='-1'></a>13.5 缓存原理
 
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200623165404113.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0RERERlbmdf,size_16,color_FFFFFF,t_70#pic_center)
 
@@ -1620,7 +1681,7 @@ public void queryBlogChoose_test() {
       </select>
   ```
 
-### 13.6 自定义缓存-ehcache
+###  13.6. <a name='ehcache'></a>13.6 自定义缓存-ehcache
 
 > Ehcache是一种广泛使用的开源Java分布式缓存。主要面向通用缓存
 
